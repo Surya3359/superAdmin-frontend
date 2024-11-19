@@ -1,0 +1,146 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* Login css */
+.App {
+  font-family: 'Poppins';
+  text-align: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* SideBar */
+
+.sidebar{
+  background-color: #0056b3;
+  height: 100%;
+  padding: 30px 0px;
+  position: fixed;
+  left: 0;
+  width: 20%;
+  top: 0;
+  justify-items: center;
+  z-index: 1;
+}
+
+.img{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  
+}
+.logo{
+  display: block;
+  border-bottom: 1px solid black;
+  padding: 10px;
+
+}
+.logo-img{
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.logo-img span{
+  position: relative;
+  align-content: center;
+  font-weight: 600;
+  font-size: 25px;
+  color: #fff;
+}
+.menu-item{
+  text-decoration: none;
+  padding: 10px 0;
+  text-align: left;
+  padding-inline-start: 20px;
+  font-weight: 500;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px !important;
+  
+}
+.menu{
+  list-style: none;
+  padding-inline-start: 0px;
+
+}
+.header{
+  width: 100%;
+  background-color: #0056b3;
+  top: 0;
+  position: fixed;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 70px;
+
+}
+.Link{
+  text-decoration: none !important;
+  color: white;
+  gap: 10px !important;
+}
+
+.host-header{
+ margin-top: 70px;
+  margin-left: 280px;
+}
+.Link span i{
+  padding: 0px 10px;
+  text-align: left;
+}
