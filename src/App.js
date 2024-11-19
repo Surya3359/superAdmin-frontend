@@ -1,5 +1,12 @@
 import React, { useState } from "react";
+//Css Imports
 import "./App.css";
+import "./EmployeeList.css";
+import "./Header.css";
+import "./Slider.css";
+import "./ClientList.css";
+import "./HostedSites.css";
+import "./TemplateAdmin.css";
 import Login from "./Pages/Login";
 import { Route,BrowserRouter as Router, Routes } from "react-router-dom";
 import SideBar from "./Component/SideBar";
@@ -15,7 +22,7 @@ import Approvals from "./Pages/Approvals";
 
 function App() {
   return(
-      <div className="App">
+          <div className="App">
           <Router>
             <Routes>
               <Route path="/" element={<Login/>}></Route>
@@ -27,8 +34,7 @@ function App() {
               <Route path="/approvals" element={<Approvals/>}></Route>
             </Routes>
           </Router>
-      </div>
-  )
-}
+          </div>
+)}
 
 export default App;

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export default function SideBar(){
     return <>
-    <div></div>
     <div className="sidebar">
         <div className="logo">
             <div className="logo-img">
@@ -51,11 +50,8 @@ export default function SideBar(){
             </ul>
         </div>
     </div>
-    <div className="header">
-        <div>
-        <span><i class="fa fa-home" aria-hidden="true"></i></span> Home
-        </div>
-    </div>
+    
+   
    
     
     </>
