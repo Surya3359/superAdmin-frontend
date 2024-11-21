@@ -7,6 +7,8 @@ import "./Slider.css";
 import "./ClientList.css";
 import "./HostedSites.css";
 import "./TemplateAdmin.css";
+import "./Home.css";
+import "./approval.css";
 import Login from "./Pages/Login";
 import { Route,BrowserRouter as Router, Routes } from "react-router-dom";
 import SideBar from "./Component/SideBar";
@@ -15,6 +17,7 @@ import TemplateAdmin from "./Pages/TemplateAdmin";
 import EmployeeList from "./Pages/EmployeeList";
 import ClientList from "./Pages/ClientList";
 import Approvals from "./Pages/Approvals";
+import DashBoard from "./Pages/SuperAdmin";
 
 
 
@@ -26,7 +29,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Login/>}></Route>
-              <Route path="/dashboard" element={<SideBar/>}></Route>
+              <Route path="/dashboard" element={<DashBoard/>}></Route>
               <Route path="/hosted-list" element={<HostedSite/>}></Route>
               <Route path="/template-admins" element={<TemplateAdmin/>}></Route>
               <Route path="/employee-list" element={<EmployeeList/>}></Route>

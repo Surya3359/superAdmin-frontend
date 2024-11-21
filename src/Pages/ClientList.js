@@ -1,10 +1,11 @@
 import Header from "../Component/Header";
 import SideBar from "../Component/SideBar";
+import React, {useState} from 'react';
 
 const StylishTable = ({ data, columns }) => {
     return (
-      <div className="table-container-client">
-        <table className="stylish-table-client">
+      <div className="table-container">
+        <table className="stylish-table">
           <thead>
             <tr>
               {columns.map((column) => (
@@ -27,6 +28,12 @@ const StylishTable = ({ data, columns }) => {
   };
 
 export default function ClientList(){
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+  setIsCollapsed(!isCollapsed);
+};
     // Sample columns and data for the StylishTable
   const columns = [
     { header: "Name", accessor: "name" },
@@ -40,9 +47,9 @@ export default function ClientList(){
     { name: "Charlie Brown", position: "Designer", email: "charlie@example.com" },
   ];
     return <>
-     <SideBar/>
-     <div className="clientlist">
-        <Header/>
+     <SideBar isCollapsed={isCollapsed}/>
+     <div className={`clientlist ${isCollapsed ? 'client-collapsed' : 'clientlist'}`}>
+        <Header toggleSidebar={toggleSidebar}/>
     <div className="client-list-contents">
        <h2 className="client-header">Client List</h2>
        <div className="client-list">

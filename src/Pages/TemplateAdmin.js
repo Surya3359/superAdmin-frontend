@@ -1,13 +1,14 @@
 import { Button } from "@mui/material";
 import Header from "../Component/Header";
 import SideBar from "../Component/SideBar";
+import React, {useState} from 'react';
 
 
 
 const StylishTable = ({ data, columns }) => {
     return (
-      <div className="table-container-admin">
-        <table className="stylish-table-admin">
+      <div className="table-container">
+        <table className="stylish-table">
           <thead>
             <tr>
               {columns.map((column) => (
@@ -33,7 +34,11 @@ const StylishTable = ({ data, columns }) => {
 
 export default function TemplateAdmin(){
     // Sample columns and data for the StylishTable
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
+    const toggleSidebar = () => {
+      setIsCollapsed(!isCollapsed);
+    };
     
 
   const columns = [
@@ -67,9 +72,9 @@ export default function TemplateAdmin(){
       ), },
   ];
     return <>
-     <SideBar/>
-     <div className="adminlist">
-        <Header/>
+     <SideBar isCollapsed={isCollapsed}/>
+     <div className={`adminlist ${isCollapsed ? 'admin-collapsed' : 'adminlist'}`}>
+        <Header toggleSidebar={toggleSidebar}/>
     <div className="admin-list-contents">
        <h2 className="admin-header">Template admin List</h2>
        <div className="admin-list">

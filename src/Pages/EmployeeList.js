@@ -1,8 +1,12 @@
 import Header from "../Component/Header";
 import SideBar from "../Component/SideBar";
+import React, {useState} from 'react';
+import { Icon } from "@iconify/react";
 
 const StylishTable = ({ data, columns }) => {
+
     return (
+      
       <div className="table-container">
         <table className="stylish-table">
           <thead>
@@ -26,7 +30,14 @@ const StylishTable = ({ data, columns }) => {
     );
   };
 
+
 export default function EmployeeList(){
+
+const [isCollapsed, setIsCollapsed] = useState(false);
+
+const toggleSidebar = () => {
+  setIsCollapsed(!isCollapsed);
+};
     // Sample columns and data for the StylishTable
   const columns = [
     { header: "Name", accessor: "name" },
@@ -40,15 +51,19 @@ export default function EmployeeList(){
     { name: "Charlie Brown", position: "Designer", email: "charlie@example.com" },
   ];
     return <>
-     <SideBar/>
-     <div className="Emplist">
-        <Header/>
-    <div className="emp-list-contents">
-       <h2 className="Emp-header">Employee List</h2>
-       <div className="page-list">
-        <StylishTable data={data} columns={columns} />
-      </div>
-    </div>
+     <SideBar isCollapsed={isCollapsed}/>
+     <div className={`Emplist ${isCollapsed ? 'emp-collapsed' : 'Emplist'}`}>
+            <Header toggleSidebar={toggleSidebar}/>
+            <div className="emp-list-contents">
+              <h2 className="Emp-header">Employee List</h2>
+              <div className="page-list">
+                <div className="table-props">
+                <input className="search" type="search" placeholder="Search..."/>
+                  <button className="button-add"><Icon icon="carbon:add-alt" style={{ fontSize: '28px', }}/><span>Add New</span></button>
+                </div>
+                <StylishTable data={data} columns={columns} />
+              </div>
+            </div>
      </div>
      </>
 }

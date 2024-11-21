@@ -1,10 +1,11 @@
 import Header from "../Component/Header";
 import SideBar from "../Component/SideBar";
-
+import React, {useState} from 'react';
+import { Icon } from "@iconify/react";
 const StylishTable = ({ data, columns }) => {
     return (
-      <div className="table-container-site">
-        <table className="stylish-table-site">
+      <div className="table-container">
+        <table className="stylish-table">
           <thead>
             <tr>
               {columns.map((column) => (
@@ -28,7 +29,14 @@ const StylishTable = ({ data, columns }) => {
 
 export default function HostedSites(){
     // Sample columns and data for the StylishTable
+
+const [isCollapsed, setIsCollapsed] = useState(false);
+
+const toggleSidebar = () => {
+  setIsCollapsed(!isCollapsed);
+};
   const columns = [
+
     { header: "Name", accessor: "name" },
     { header: "Position", accessor: "position" },
     { header: "Email", accessor: "email" },
@@ -40,9 +48,9 @@ export default function HostedSites(){
     { name: "Charlie Brown", position: "Designer", email: "charlie@example.com" },
   ];
     return <>
-     <SideBar/>
-     <div className="sitelist">
-        <Header/>
+     <SideBar isCollapsed={isCollapsed}/>
+     <div className={`sitelist ${isCollapsed ? 'site-collapsed' : 'sitelist'}`}>
+        <Header toggleSidebar={toggleSidebar}/>
     <div className="site-list-contents">
        <h2 className="site-header">Hosted Site List</h2>
        <div className="site-list">

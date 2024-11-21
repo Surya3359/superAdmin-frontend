@@ -1,26 +1,27 @@
 
-.clientlist{
+.dashboardlist{
 
     min-width: 79%;
     background-color: #f5f5f5;
     max-width: none;
     min-height: 600px;
+    
 }
-.client-list-contents{
-    padding: 10px 20px;
-}
-.client-header{
-    text-align: center;
-}
-.client-collapsed{
+.dashboard-collapsed{
   min-width: 94%;
   background-color: #f5f5f5;
   min-height: 600px;  
-  transition: all 200ms;
+  transition: all 100ms;
+}
+.dashboard-list-contents{
+    padding: 10px 20px;
+}
+.dashboard-header{
+    text-align: center;
 }
 
 /* Employee Table */
-.table-container-client {
+.table-container-dashboard {
     overflow-x: auto;
     margin: 20px;
     border: 1px solid #ddd;
@@ -28,42 +29,47 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
    
-  .stylish-table-client {
+  .stylish-table-dashboard {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
     font-family: Arial, sans-serif;
   }
    
-  .stylish-table-client thead {
+  .stylish-table-dashboard thead {
     background-color: #2c3e50;
     color: white;
   }
    
-  .stylish-table-client th,
-  .stylish-table-client td {
+  .stylish-table-dashboard th,
+  .stylish-table-dashboard td {
     padding: 12px 15px;
     border-bottom: 1px solid #ddd;
   }
    
-  .stylish-table-client tr:hover {
+  .stylish-table-dashboard tr:hover {
     background-color: cornflowerblue;
     color: #2c3e50;
     cursor: pointer;
   }
    
-  .stylish-table-client th {
+  .stylish-table-dashboard th {
     font-size: 16px;
     font-weight: bold;
   }
    
-  .stylish-table-client td {
+  .stylish-table-dashboard td {
     font-size: 14px;
     color: #2c3e50;
   }
    
-  .client-list{
+  .dashboard-list{
     display: inline;
     width: 80%;
     margin-left: 20%;
+  }
+
+  .action-button Button{
+    
+    width: 35%;
   }
