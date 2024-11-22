@@ -1,23 +1,27 @@
 
 .sitelist{
 
-    min-width: 79%;
+    width: 79%;
     background-color: #f5f5f5;
-    max-width: none;
+   
     min-height: 600px;
+    box-sizing: border-box;
     
 }
 .site-list-contents{
     padding: 10px 20px;
+    box-sizing: border-box;
 }
 .site-header{
     text-align: center;
+    box-sizing: border-box;
 }
 .site-collapsed{
-  min-width: 94%;
+  width: 94%;
   background-color: #f5f5f5;
   min-height: 600px;  
   transition: all 200ms;
+  box-sizing: border-box;
 }
 
 /* Employee Table */
@@ -27,6 +31,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
   }
    
   .stylish-table-site {
@@ -34,6 +39,7 @@
     border-collapse: collapse;
     text-align: left;
     font-family: Arial, sans-serif;
+    box-sizing: border-box;
   }
    
   .stylish-table-site thead {
@@ -67,4 +73,5 @@
     display: inline;
     width: 80%;
     margin-left: 20%;
+    box-sizing: border-box;
   }

@@ -78,4 +78,54 @@ button:hover {
 }
  
 /* SideBar */
- 
+.table-props{
+  display: flex;
+  justify-content: space-between;
+}
+
+select {
+  padding: 5px 10px;
+  font-size: 12px;
+  outline: none;
+  height: 35px;
+  background: none;
+  border-radius: 10px;
+  font-family: 'Poppins';
+}
+option{
+  border-radius: 10px;
+
+}
+.filter{
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+.filter-icon{
+  margin-top: 0;
+}
+.filter label {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 0 !important;
+}
+
+/* action buttons */
+
+button svg{
+  margin: 0 !important;
+  font-size: 20px;
+}
+button{
+  box-sizing: border-box;
+  justify-items: center;
+  align-content: center;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  margin: 3px;
+}
+.edit-btn{
+  background-color: rgb(9, 134, 9);
+}

@@ -8,6 +8,7 @@
     justify-items: center;
     z-index: 1;
     transition: all 200ms;
+    box-sizing: border-box;
   }
    
   .collapsed {

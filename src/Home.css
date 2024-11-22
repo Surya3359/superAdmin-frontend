@@ -1,9 +1,9 @@
 
 .dashboardlist{
 
-    min-width: 79%;
+    width: 79%;
     background-color: #f5f5f5;
-    max-width: none;
+   
     min-height: 600px;
     
 }
