@@ -75,6 +75,20 @@ export default function Templatelist(){
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const [sortedData, setSortedData] = useState([]); // Sorted data
+  const [sortOption, setSortOption] = useState("alphabetic");
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
+
+  // Handle search functionality
+  useEffect(() => {
+    const filteredData = data.filter((item) =>
+      Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    setSortedData(filteredData);
+  }, [searchTerm, data]);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -109,6 +123,27 @@ export default function Templatelist(){
     fetchData();
   }, []);
 
+  // Handle sorting logic
+  useEffect(() => {
+    const sortData = () => {
+      let sorted = [...data];
+      if (sortOption === "alphabetic") {
+        sorted.sort((a, b) => a.Temp_name.localeCompare(b.Temp_name));
+      } else if (sortOption === "reverse-alphabetic") {
+        sorted.sort((a, b) => b.Temp_name.localeCompare(a.Temp_name));
+      } else if (sortOption === "date-newest") {
+        sorted.sort((a, b) => new Date(b.CompletedDate) - new Date(a.CompletedDate));
+      } else if (sortOption === "date-oldest") {
+        sorted.sort((a, b) => new Date(a.CompletedDate) - new Date(b.CompletedDate));
+      }
+      setSortedData(sorted);
+    };
+
+    sortData();
+  }, [sortOption, data]);
+
+
+
     // Sample columns and data for the StylishTable
   const columns = [
     { header: "Template Name", accessor: "Temp_name" },
@@ -128,19 +163,27 @@ export default function Templatelist(){
     <div className="approval-list-contents">
        <h2 className="approval-header">Approval List</h2>
        <div className="table-props">
-                    <input className="search" type="search" placeholder="Search..."/>
+       <input
+              className="search"
+              type="search"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+            />
                     <div className="filter">
-                        <label><Icon className="filter-icon" icon="stash:filter-light" style={{ fontSize: '28px', }}/><span>Filter :</span></label>
-                        <select id="filterDropdown">
+                        <label><Icon className="filter-icon" icon="stash:filter-light" style={{ fontSize: '28px', }}/><span>Sort By :</span></label>
+                        <select id="filterDropdown"
+                        value={sortOption}
+                        onChange={(e) => setSortOption(e.target.value)}>
                           <option value="alphabetic">Alphabetical Order (A-Z)</option>
                           <option value="reverse-alphabetic">Alphabetical Order (Z-A)</option>
-                          <option value="date-newest">Modified Date (Newest First)</option>
-                          <option value="date-oldest">Modified Date (Oldest First)</option>
+                          <option value="date-newest">Completed Date (Newest First)</option>
+                          <option value="date-oldest">Completed Date (Oldest First)</option>
                         </select>
                     </div>
           </div>
           <StylishTable
-              data={data}
+              data={sortedData}
               columns={columns}
               handleEdit={handleEdit}
               handleDelete={handleDelete}

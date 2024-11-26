@@ -47,6 +47,21 @@ export default function Hostedsites(){
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const [sortedData, setSortedData] = useState([]); // Sorted data
+  const [sortOption, setSortOption] = useState("alphabetic");
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
+
+  
+  // Handle search functionality
+  useEffect(() => {
+    const filteredData = data.filter((item) =>
+      Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    setSortedData(filteredData);
+  }, [searchTerm, data]);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -68,6 +83,25 @@ export default function Hostedsites(){
     fetchData();
   }, []);
 
+  // Handle sorting logic
+  useEffect(() => {
+    const sortData = () => {
+      let sorted = [...data];
+      if (sortOption === "alphabetic") {
+        sorted.sort((a, b) => a.Admin_name.localeCompare(b.Admin_name));
+      } else if (sortOption === "reverse-alphabetic") {
+        sorted.sort((a, b) => b.Admin_name.localeCompare(a.Admin_name));
+      } else if (sortOption === "date-newest") {
+        sorted.sort((a, b) => new Date(b.RenewalDate) - new Date(a.RenewalDate));
+      } else if (sortOption === "date-oldest") {
+        sorted.sort((a, b) => new Date(a.RenewalDate) - new Date(b.RenewalDate));
+      }
+      setSortedData(sorted);
+    };
+
+    sortData();
+  }, [sortOption, data]);
+
     // Sample columns and data for the StylishTable
   const columns = [
     { header: "Client-Id", accessor: "Client_Id" },
@@ -83,27 +117,34 @@ export default function Hostedsites(){
   ];
  
   
-  return <>
-  <SideBar isCollapsed={isCollapsed}/>
-  <div className={`sitelist ${isCollapsed ? 'site-collapsed' : 'sitelist'}`}>
-     <Header toggleSidebar={toggleSidebar}/>
- <div className="site-list-contents">
-    <h2 className="site-header">Hosted Sites List</h2>
-    <div className="table-props">
-                    <input className="search" type="search" placeholder="Search..."/>
-                    <div className="filter">
-                        <label><Icon className="filter-icon" icon="stash:filter-light" style={{ fontSize: '28px', }}/><span>Filter :</span></label>
-                        <select id="filterDropdown">
-                          <option value="alphabetic">Alphabetical Order (A-Z)</option>
-                          <option value="reverse-alphabetic">Alphabetical Order (Z-A)</option>
-                          <option value="date-newest">Modified Date (Newest First)</option>
-                          <option value="date-oldest">Modified Date (Oldest First)</option>
-                        </select>
-                    </div>
-          </div>
-    <StylishTable data={data} columns={columns} />
+  return(<>
+    <SideBar isCollapsed={isCollapsed}/>
+    <div className={`sitelist ${isCollapsed ? 'site-collapsed' : 'sitelist'}`}>
+       <Header toggleSidebar={toggleSidebar}/>
+   <div className="site-list-contents">
+      <h2 className="site-header">Hosted Sites List</h2>
+      <div className="table-props">
+                <input    className="search"
+                          type="search"
+                          placeholder="Search..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+                        />
+                      <div className="filter">
+                          <label><Icon className="filter-icon" icon="stash:filter-light" style={{ fontSize: '28px', }}/><span>Sort By :</span></label>
+                          <select id="filterDropdown"
+                          value={sortOption}
+                          onChange={(e) => setSortOption(e.target.value)}>
+                            <option value="alphabetic">Alphabetical Order (A-Z)</option>
+                            <option value="reverse-alphabetic">Alphabetical Order (Z-A)</option>
+                            <option value="date-newest">Renewal Date (Newest First)</option>
+                            <option value="date-oldest">Renewal Date (Oldest First)</option>
+                          </select>
+                      </div>
+            </div>
+      <StylishTable data={sortedData} columns={columns} />
+     </div>
    </div>
- </div>
-
-  </>
+  
+    </>) 
 }
