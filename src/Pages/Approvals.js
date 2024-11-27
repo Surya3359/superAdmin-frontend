@@ -30,25 +30,33 @@ const StylishTable = ({ data, columns, handleEdit, handleDelete }) => {
               <tr key={rowIndex}>
                 {columns.map((column) =>  column.accessor === "actions" ? 
                 (
-                  <td key="actions">
-                    <div className="action-buttons">
+                  <td key="approval00">
+                    <div className="approval-buttons">
                       <button
                         variant="contained"
                         color="primary"
-                         
+                         className="btn-approve"
                          style={{backgroundColor:"rgb(9, 134, 9)"}}
                          onClick={() => handleEdit(row)}
                       >
-                       <Icon icon="fa6-solid:file-pen" style={{ fontSize: '14px',margin:0 }}/>
-                      </button>
+                       <Icon icon="simple-line-icons:check" style={{ fontSize: '14px',margin:0 }}/>
+                       </button>
                       <button
                         variant="contained"
                         color="secondary"
-                        className="del=btn"
+                        className="cancel-btn"
                         style={{backgroundColor:"red"}}
                         onClick={() => handleDelete(row)}
                       >
-                       <Icon  icon="streamline:recycle-bin-2" style={{ fontSize: '14px',   }}/>
+                       <Icon  icon="ic:outline-cancel" style={{ fontSize: '14px',   }}/>
+                      </button>                     <button
+                        variant="contained"
+                        color="secondary"
+                        className="preview-btn"
+                        style={{backgroundColor:"blue"}}
+                        onClick={() => handleDelete(row)}
+                      >
+                       <Icon  icon="fluent-mdl2:view" style={{ fontSize: '14px',   }}/>
                       </button>
                     </div>
                   </td>

@@ -229,6 +229,7 @@ export default function TemplateAdmin(){
               className="search"
               type="search"
               placeholder="Search..."
+              
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Update search term
             />

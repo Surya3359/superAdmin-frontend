@@ -3,7 +3,8 @@
 
     width: 79%;
     background-color: #f5f5f5;
-    min-height: 600px;
+    height: 638px;
+    overflow-y: scroll;
     
 }
 .approval-collapsed{
@@ -68,7 +69,36 @@
     margin-left: 20%;
   }
 
-  .action-button Button{
+  .approval-buttons Button{
     
-    width: 35%;
+    width: fit-content;
+  }
+  .btn-approve{
+    display: flex;
+    border-radius: 10px !important;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 6px;
+  }
+
+  .cancel-btn{
+    display: flex;
+    border-radius: 10px !important;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 6px;
+  }  .preview-btn{
+    display: flex;
+    border-radius: 10px !important;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 6px;
+    background-color: blue;
+  }
+
+  .approval-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    
+    
   }

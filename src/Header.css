@@ -1,5 +1,5 @@
 .header{
-    max-width: 100%;
+    box-sizing: border-box;
     background-color: #f5f5f5;
     top: 0;
     display: flex;
@@ -9,6 +9,8 @@
     padding: 0 20px;
     box-sizing: border-box;
     border-bottom: 1px solid #ecebeb;
+
+
   }
   .profiles{
     align-content: center;
