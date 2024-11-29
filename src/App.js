@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 //Css Imports
 import "./App.css";
 import "./EmployeeList.css";
@@ -11,7 +11,6 @@ import "./Home.css";
 import "./approval.css";
 import Login from "./Pages/Login";
 import { Route,BrowserRouter as Router, Routes } from "react-router-dom";
-import SideBar from "./Component/SideBar";
 import HostedSite from "./Pages/HostedSites";
 import TemplateAdmin from "./Pages/TemplateAdmin";
 import EmployeeList from "./Pages/EmployeeList";

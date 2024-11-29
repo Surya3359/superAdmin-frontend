@@ -5,9 +5,7 @@ import axios from "axios";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 
-
-
-const StylishTable = ({ data, columns, handleEdit, handleDelete }) => {
+const StylishTable = ({ data, columns, handleEdit, handleUnzip, handleDelete, handlePreview }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -15,74 +13,78 @@ const StylishTable = ({ data, columns, handleEdit, handleDelete }) => {
     return date.toISOString().split("T")[0]; // Formats as YYYY-MM-DD
   };
 
-    return (
-      <div className="table-container">
-        <table className="stylish-table">
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.accessor}>{column.header}</th>
+  return (
+    <div className="table-container">
+      <table className="stylish-table">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.accessor}>{column.header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+        {data.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((column) =>  column.accessor === "actions" ? 
+              (
+                <td key="approval00">
+                  <div className="approval-buttons">
+                    <button
+                      variant="contained"
+                      color="primary"
+                      className="btn-approve"
+                      style={{backgroundColor:"rgb(9, 134, 9)"}}
+                      onClick={() => {
+                        handleEdit(row); // Approve action
+                        handleUnzip(row);
+                      }}
+                      disabled={row.Approval_status === "Approved"}
+
+                    >
+                     <Icon icon="simple-line-icons:check" style={{ fontSize: '14px',margin:0 }}/> Approve
+                     </button>
+                    <button
+                      variant="contained"
+                      color="secondary"
+                      className="cancel-btn"
+                      style={{backgroundColor:"red"}}
+                      onClick={() => handleDelete(row)}
+                    >
+                     <Icon  icon="ic:outline-cancel" style={{ fontSize: '14px',   }}/>
+                    </button>                     
+                    <button
+                      variant="contained"
+                      color="secondary"
+                      className="preview-btn"
+                      style={{backgroundColor:"blue"}}
+                      onClick={() => handlePreview(row)}
+                    >
+                     <Icon  icon="fluent-mdl2:view" style={{ fontSize: '14px',   }}/>
+                    </button>
+                  </div>
+                </td>
+              ) : 
+              (
+                <td key={column.accessor}>{column.accessor === "Status"
+                  ? row[column.accessor]
+                    ? "Active"
+                    : "Inactive"
+                    : column.accessor === "CompletedDate" || column.accessor === "ApprovedDate"
+                  ? formatDate(row[column.accessor]) // Format date
+                  : row[column.accessor]}</td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-          {data.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {columns.map((column) =>  column.accessor === "actions" ? 
-                (
-                  <td key="approval00">
-                    <div className="approval-buttons">
-                      <button
-                        variant="contained"
-                        color="primary"
-                         className="btn-approve"
-                         style={{backgroundColor:"rgb(9, 134, 9)"}}
-                         onClick={() => handleEdit(row)}
-                      >
-                       <Icon icon="simple-line-icons:check" style={{ fontSize: '14px',margin:0 }}/>
-                       </button>
-                      <button
-                        variant="contained"
-                        color="secondary"
-                        className="cancel-btn"
-                        style={{backgroundColor:"red"}}
-                        onClick={() => handleDelete(row)}
-                      >
-                       <Icon  icon="ic:outline-cancel" style={{ fontSize: '14px',   }}/>
-                      </button>                     <button
-                        variant="contained"
-                        color="secondary"
-                        className="preview-btn"
-                        style={{backgroundColor:"blue"}}
-                        onClick={() => handleDelete(row)}
-                      >
-                       <Icon  icon="fluent-mdl2:view" style={{ fontSize: '14px',   }}/>
-                      </button>
-                    </div>
-                  </td>
-                ) : 
-                (
-                  <td key={column.accessor}>{column.accessor === "Status"
-                    ? row[column.accessor]
-                      ? "Active"
-                      : "Inactive"
-                      : column.accessor === "CompletedDate" || column.accessor === "ApprovedDate"
-                    ? formatDate(row[column.accessor]) // Format date
-                    : row[column.accessor]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
-export default function Templatelist(){
+export default function Templatelist() {
   const [data, setData] = useState([]);
-
   const [isCollapsed, setIsCollapsed] = useState(false);
-
   const [sortedData, setSortedData] = useState([]); // Sorted data
   const [sortOption, setSortOption] = useState("alphabetic");
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
@@ -101,20 +103,94 @@ export default function Templatelist(){
     setIsCollapsed(!isCollapsed);
   };
 
-  // Handle Edit Action
-  const handleEdit = (row) => {
-    console.log("Edit action triggered for:", row);
-    // Add your edit functionality here
+
+  // handle approve
+  const handleEdit = async (row) => {
+    try {
+      const updatedRow = { ...row, Approval_status: "Approved" }; // Update status to "Approved"
+      const response = await axios.put(`http://localhost:8000/api/templist/${row._id}`, updatedRow);
+
+      if (response.status === 200) {
+        // Update the local state to reflect the changes
+        setData((prevData) =>
+          prevData.map((item) =>
+            item._id === row._id ? { ...item, Approval_status: "Approved" } : item
+          )
+        );
+        console.log("Approval status updated successfully");
+      } else {
+        console.error("Failed to update approval status:", response.data);
+      }
+    } catch (error) {
+      console.error("Error updating approval status:", error);
+    }
   };
 
-  // Handle Delete Action
-  const handleDelete = (row) => {
-    console.log("Delete action triggered for:", row);
-    // Add your delete functionality here
+  // handle unzip
+  const handleUnzip = async (row) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/templist/unzip/${row._id}`);
+
+      if (response.status === 200) {
+        // Update the local state to reflect the changes
+        setData((prevData) =>
+          prevData.map((item) =>
+            item._id === row._id ? { ...item, Approval_status: "Approved" } : item
+          )
+        );
+        alert("selected template successfully Unzipped");
+      } else {
+        console.error("Failed Unzip selected file:", response.data);
+      }
+    } catch (error) {
+      const errorcatcher = await axios.get(`http://localhost:8000/api/templist/unzip/${row._id}`);
+      alert(`Error Occures while Extracting ${errorcatcher.Temp_name}:`, error);
+    }
   };
+
+  //Handle Delete
+  const handleDelete = async (row) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the template "${row.Temp_name}"?`);
     
+    if (confirmDelete) {
+      try {
+        // Send a DELETE request to the API
+        const response = await axios.delete(`http://localhost:8000/api/templist/${row._id}`);
+        
+        if (response.status === 200) {
+          alert(`Template "${row.Temp_name}" deleted successfully!`);
+          
+          // Update state to remove the deleted item
+          setData((prevData) => prevData.filter((item) => item._id !== row._id));
+        } else {
+          console.error("Failed to delete the template:", response.data);
+          alert("Failed to delete the template. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error deleting template:", error);
+        alert("An error occurred while deleting the template. Please try again later.");
+      }
+    } else {
+      console.log("Delete action canceled for:", row);
+    }
+  };
 
-  //backend process
+  //Handle preview
+  const handlePreview = async (row) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/templist/preview/${row._id}`);
+      // Access `templateUrl` from `response.data`
+      if (response.data && response.data.templateUrl) {
+        window.open(response.data.templateUrl, '_blank'); // Open the URL in a new tab
+      } else {
+        alert("Template URL not available for this item.");
+      }
+    } catch (error) {
+      console.error("Error in Preview function", error);
+      alert("An error occurred while trying to fetch the template URL.");
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -131,28 +207,23 @@ export default function Templatelist(){
     fetchData();
   }, []);
 
-  // Handle sorting logic
   useEffect(() => {
     const sortData = () => {
       let sorted = [...data];
       if (sortOption === "alphabetic") {
-        sorted.sort((a, b) => a.Temp_name.localeCompare(b.Temp_name));
+        sorted.sort((a, b) => (a.Temp_name || "").localeCompare(b.Temp_name || ""));
       } else if (sortOption === "reverse-alphabetic") {
-        sorted.sort((a, b) => b.Temp_name.localeCompare(a.Temp_name));
+        sorted.sort((a, b) => (b.Temp_name || "").localeCompare(a.Temp_name || ""));
       } else if (sortOption === "date-newest") {
-        sorted.sort((a, b) => new Date(b.CompletedDate) - new Date(a.CompletedDate));
+        sorted.sort((a, b) => new Date(b.CompletedDate || 0) - new Date(a.CompletedDate || 0));
       } else if (sortOption === "date-oldest") {
-        sorted.sort((a, b) => new Date(a.CompletedDate) - new Date(b.CompletedDate));
+        sorted.sort((a, b) => new Date(a.CompletedDate || 0) - new Date(b.CompletedDate || 0));
       }
       setSortedData(sorted);
     };
-
     sortData();
   }, [sortOption, data]);
 
-
-
-    // Sample columns and data for the StylishTable
   const columns = [
     { header: "Template Name", accessor: "Temp_name" },
     { header: "Template Id", accessor: "Temp_id" },
@@ -161,43 +232,48 @@ export default function Templatelist(){
     { header: "Completed Date", accessor: "CompletedDate" },
     { header: "Approved Date", accessor: "ApprovedDate" },
     { header: "Actions", accessor: "actions" },
+    { header: "Template Url", accessor: "templateUrl" }
   ];
- 
-  
-  return <>
-     <SideBar isCollapsed={isCollapsed}/>
-     <div className={`approvallist ${isCollapsed ? 'approval-collapsed' : 'approvallist'}`}>
-        <Header toggleSidebar={toggleSidebar}/>
-    <div className="approval-list-contents">
-       <h2 className="approval-header">Approval List</h2>
-       <div className="table-props">
-       <input
+
+  return (
+    <>
+      <SideBar isCollapsed={isCollapsed} />
+      <div className={`approvallist ${isCollapsed ? 'approval-collapsed' : 'approvallist'}`}>
+        <Header toggleSidebar={toggleSidebar} />
+        <div className="approval-list-contents">
+          <h2 className="approval-header">Approval List</h2>
+          <div className="table-props">
+            <input
               className="search"
               type="search"
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Update search term
             />
-                    <div className="filter">
-                        <label><Icon className="filter-icon" icon="stash:filter-light" style={{ fontSize: '28px', }}/><span>Sort By :</span></label>
-                        <select id="filterDropdown"
-                        value={sortOption}
-                        onChange={(e) => setSortOption(e.target.value)}>
-                          <option value="alphabetic">Alphabetical Order (A-Z)</option>
-                          <option value="reverse-alphabetic">Alphabetical Order (Z-A)</option>
-                          <option value="date-newest">Completed Date (Newest First)</option>
-                          <option value="date-oldest">Completed Date (Oldest First)</option>
-                        </select>
-                    </div>
+            <div className="filter">
+              <label><Icon className="filter-icon" icon="stash:filter-light" style={{ fontSize: '28px' }}/><span>Sort By :</span></label>
+              <select
+                id="filterDropdown"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="alphabetic">Alphabetical Order (A-Z)</option>
+                <option value="reverse-alphabetic">Alphabetical Order (Z-A)</option>
+                <option value="date-newest">Completed Date (Newest First)</option>
+                <option value="date-oldest">Completed Date (Oldest First)</option>
+              </select>
+            </div>
           </div>
           <StylishTable
-              data={sortedData}
-              columns={columns}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-            />
+            data={sortedData}
+            columns={columns}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleUnzip={handleUnzip}
+            handlePreview={handlePreview}
+          />
+        </div>
       </div>
-    </div>
-
-     </>
+    </>
+  );
 }
