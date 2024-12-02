@@ -175,13 +175,16 @@ export default function Templatelist() {
     }
   };
 
-  //Handle preview
+  //Handle Preview
   const handlePreview = async (row) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/templist/preview/${row._id}`);
+      const response = await axios.get(`http://localhost:8000/api/templist/${row._id}`);
       // Access `templateUrl` from `response.data`
       if (response.data && response.data.templateUrl) {
-        window.open(response.data.templateUrl, '_blank'); // Open the URL in a new tab
+          // Construct the file URL, assuming filePath starts from "/Preview_Templates"
+          const fileUrl = `http://localhost:3000${response.data.templateUrl}`;
+          // Open the file URL in a new tab
+          window.open(fileUrl, '_blank');
       } else {
         alert("Template URL not available for this item.");
       }
