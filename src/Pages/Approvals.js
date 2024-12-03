@@ -3,7 +3,8 @@ import SideBar from "../Component/SideBar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Icon } from "@iconify/react/dist/iconify.js";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const StylishTable = ({ data, columns, handleEdit, handleUnzip, handleDelete, handlePreview }) => {
 
@@ -171,13 +172,13 @@ const paginatedData = sortedData.slice(
             item._id === row._id ? { ...item, Approval_status: "Approved" } : item
           )
         );
-        alert("selected template successfully Unzipped");
+        toast.success("selected template successfully Unzipped");
       } else {
         console.error("Failed Unzip selected file:", response.data);
       }
     } catch (error) {
       const errorcatcher = await axios.get(`http://localhost:8000/api/templist/unzip/${row._id}`);
-      alert(`Error Occures while Extracting ${errorcatcher.Temp_name}:`, error);
+      toast.error(`Error Occures while Extracting ${errorcatcher.Temp_name}:`, error);
     }
   };
 
@@ -191,17 +192,17 @@ const paginatedData = sortedData.slice(
         const response = await axios.delete(`http://localhost:8000/api/templist/${row._id}`);
         
         if (response.status === 200) {
-          alert(`Template "${row.Temp_name}" deleted successfully!`);
+          toast.success(`Template "${row.Temp_name}" deleted successfully!`);
           
           // Update state to remove the deleted item
           setData((prevData) => prevData.filter((item) => item._id !== row._id));
         } else {
           console.error("Failed to delete the template:", response.data);
-          alert("Failed to delete the template. Please try again.");
+          toast.error("Failed to delete the template. Please try again.");
         }
       } catch (error) {
         console.error("Error deleting template:", error);
-        alert("An error occurred while deleting the template. Please try again later.");
+        toast.error("An error occurred while deleting the template. Please try again later.");
       }
     } else {
       console.log("Delete action canceled for:", row);
@@ -219,11 +220,11 @@ const paginatedData = sortedData.slice(
           // Open the file URL in a new tab
           window.open(fileUrl, '_blank');
       } else {
-        alert("Template URL not available for this item.");
+        toast.error("Template URL not available for this item.");
       }
     } catch (error) {
       console.error("Error in Preview function", error);
-      alert("An error occurred while trying to fetch the template URL.");
+      toast.error("An error occurred while trying to fetch the template URL.");
     }
   };
 
@@ -276,6 +277,7 @@ const paginatedData = sortedData.slice(
       <SideBar isCollapsed={isCollapsed} />
       <div className={`approvallist ${isCollapsed ? 'approval-collapsed' : 'approvallist'}`}>
         <Header toggleSidebar={toggleSidebar} />
+        <ToastContainer />
         <div className="approval-list-contents">
           <h2 className="approval-header">Approval List</h2>
           <div className="table-props">
@@ -301,7 +303,7 @@ const paginatedData = sortedData.slice(
             </div>
           </div>
           <StylishTable
-            data={sortedData}
+            data={paginatedData}
             columns={columns}
             handleEdit={handleEdit}
             handleDelete={handleDelete}

@@ -190,12 +190,12 @@ useEffect(() => {
         Employee_status
       });
 
-      alert("Employee details updated successfully!");
+      toast.success("Employee details updated successfully!");
       setIsEditPopupOpen(false);
       fetchData(); // Refresh the table data
     } catch (error) {
       console.error("Error updating employee:", error);
-      alert("Failed to update employee details.");
+      toast.error("Failed to update employee details.");
     }
   };
 
@@ -211,7 +211,7 @@ useEffect(() => {
         setData((prevData) => prevData.filter((employee) => employee.Employee_id !== row.Employee_id));
       } catch (error) {
         console.error("Error deleting employee:", error);
-        alert("Failed to delete the employee. Please try again.");
+        toast.error("Failed to delete the employee. Please try again.");
       }
     }
 

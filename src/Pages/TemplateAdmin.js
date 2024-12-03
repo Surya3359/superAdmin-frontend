@@ -5,7 +5,9 @@ import axios from "axios";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 
 
@@ -198,7 +200,7 @@ const paginatedData = sortedData.slice(
         setData((prevData) => prevData.filter((employee) => employee.Employee_id !== row.Employee_id));
       } catch (error) {
         console.error("Error deleting employee:", error);
-        alert("Failed to delete the employee. Please try again.");
+        toast.error("Failed to delete the employee. Please try again.");
       }
     }
     window.location.reload();
@@ -254,6 +256,7 @@ const paginatedData = sortedData.slice(
      <SideBar isCollapsed={isCollapsed}/>
      <div className={`adminlist ${isCollapsed ? 'admin-collapsed' : 'adminlist'}`}>
         <Header toggleSidebar={toggleSidebar}/>
+        <ToastContainer/>
     <div className="admin-list-contents">
        <h2 className="admin-header">Template admin List</h2>
        <div className="table-props">
