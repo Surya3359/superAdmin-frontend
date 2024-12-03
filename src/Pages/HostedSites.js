@@ -41,7 +41,29 @@ const StylishTable = ({ data, columns }) => {
       </div>
     );
   };
-
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    return (
+      <div className="pagination">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          <Icon icon="material-symbols-light:fast-rewind" style={{ fontSize: "23px" }} />Prev
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          Next
+          <Icon icon="material-symbols-light:fast-forward" style={{ fontSize: "23px" }} />
+          
+        </button>
+      </div>
+    );
+};
 export default function Hostedsites(){
   const [data, setData] = useState([]);
 
@@ -50,6 +72,16 @@ export default function Hostedsites(){
   const [sortedData, setSortedData] = useState([]); // Sorted data
   const [sortOption, setSortOption] = useState("alphabetic");
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of items per page
+
+  // Pagination logic
+const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+const paginatedData = sortedData.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
 
   
   // Handle search functionality
@@ -142,7 +174,14 @@ export default function Hostedsites(){
                           </select>
                       </div>
             </div>
-      <StylishTable data={sortedData} columns={columns} />
+      <StylishTable   
+      data={paginatedData} // Use paginatedData instead of sortedData
+      columns={columns} />
+      <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
      </div>
    </div>
   

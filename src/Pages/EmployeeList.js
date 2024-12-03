@@ -5,7 +5,8 @@ import axios from "axios";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //Edit function
 
@@ -82,6 +83,30 @@ const StylishTable = ({ data, columns, handleEdit, handleDelete}) => {
   );
 };
 
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  return (
+    <div className="pagination">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => onPageChange(currentPage - 1)}
+      >
+        <Icon icon="material-symbols-light:fast-rewind" style={{ fontSize: "23px" }} />Prev
+      </button>
+      <span>
+        Page {currentPage} of {totalPages}
+      </span>
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => onPageChange(currentPage + 1)}
+      >
+        Next
+        <Icon icon="material-symbols-light:fast-forward" style={{ fontSize: "23px" }} />
+        
+      </button>
+    </div>
+  );
+};
+
 export default function EmployeeList() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,6 +120,16 @@ export default function EmployeeList() {
   const [sortOption, setSortOption] = useState("alphabetic");
   //search filter
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of items per page
+
+
+// Pagination logic
+const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+const paginatedData = sortedData.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
 
   // Handle search functionality
 useEffect(() => {
@@ -170,7 +205,7 @@ useEffect(() => {
       try {
         // Assuming the backend route is: DELETE /api/employees/:id
         await axios.delete(`http://localhost:8000/api/employees/${row._id}`);
-        alert(`Employee ${row.Employee_name} deleted successfully!`);
+        toast.success(`Employee ${row.Employee_name} deleted successfully!`);
   
         // Update the state to reflect the deleted employee
         setData((prevData) => prevData.filter((employee) => employee.Employee_id !== row.Employee_id));
@@ -213,6 +248,7 @@ useEffect(() => {
       <SideBar isCollapsed={isCollapsed} />
       <div className={`Emplist ${isCollapsed ? "emp-collapsed" : ""}`}>
         <Header toggleSidebar={toggleSidebar} />
+        <ToastContainer />
         <div className="emp-list-contents">
           <h2 className="Emp-header">Employee List</h2>
           <div className="page-list">
@@ -280,11 +316,11 @@ useEffect(() => {
 
                           try {
                             await axios.post('http://localhost:8000/api/employees', newEmployee);
-                            alert('Employee added successfully with password: ' + password);
+                            toast.success('Employee added successfully with password: ' + password);
                             close(); // Close the popup
                           } catch (error) {
                             console.error('Error saving employee:', error);
-                            alert('Failed to add employee.');
+                            toast.error('Failed to add employee.');
                           }
                           window.location.reload();
                         }}
@@ -363,13 +399,19 @@ useEffect(() => {
             </div>
             {loading ? (
               <div>Loading...</div>
-            ) : (
+            ) : (<>
               <StylishTable
-                data={sortedData} // Pass fetched data here
-                columns={columns}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
+                 data={paginatedData} // Use paginatedData instead of sortedData
+                 columns={columns}
+                 handleEdit={handleEdit}
+                 handleDelete={handleDelete}
               />
+              <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+          </>
             )}
           </div>
         </div>

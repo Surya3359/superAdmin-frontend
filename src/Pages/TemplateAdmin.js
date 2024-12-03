@@ -5,6 +5,7 @@ import axios from "axios";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { toast } from "react-toastify";
 
 
 
@@ -80,7 +81,29 @@ const StylishTable = ({ data, columns, handleEdit, handleDelete  }) => {
   );
   };
 
-
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    return (
+      <div className="pagination">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          <Icon icon="material-symbols-light:fast-rewind" style={{ fontSize: "23px" }} />Prev
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          Next
+          <Icon icon="material-symbols-light:fast-forward" style={{ fontSize: "23px" }} />
+          
+        </button>
+      </div>
+    );
+  };
 export default function TemplateAdmin(){
   const [data, setData] = useState([]);
 
@@ -96,6 +119,15 @@ export default function TemplateAdmin(){
   const [sortOption, setSortOption] = useState("alphabetic");
 
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of items per page
+
+// Pagination logic
+const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+const paginatedData = sortedData.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
 
   // Handle search functionality
   useEffect(() => {
@@ -145,12 +177,12 @@ export default function TemplateAdmin(){
           Address
         });
   
-        alert("Template Admin details updated successfully!");
+        toast.info("Template Admin details updated successfully!");
         setIsEditPopupOpen(false);
         fetchData(); // Refresh the table data
       } catch (error) {
         console.error("Error updating Template_Admin:", error);
-        alert("Failed to update Template Admin detail.");
+        toast.error("Failed to update Template Admin detail.");
       }
     };
 
@@ -160,7 +192,7 @@ export default function TemplateAdmin(){
       try {
         // Assuming the backend route is: DELETE /api/employees/:id
         await axios.delete(`http://localhost:8000/api/admins/${row._id}`);
-        alert(`Employee ${row.Employee_name} deleted successfully!`);
+        toast.success(`Employee ${row.Employee_name} deleted successfully!`);
   
         // Update the state to reflect the deleted employee
         setData((prevData) => prevData.filter((employee) => employee.Employee_id !== row.Employee_id));
@@ -247,13 +279,19 @@ export default function TemplateAdmin(){
        <div className="admin-list">
        {loading ? (
               <div>Loading...</div>
-            ) : (
+            ) : (<>
               <StylishTable
-                data={sortedData} // Pass fetched data here
-                columns={columns}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
+              data={paginatedData} // Use paginatedData instead of sortedData
+              columns={columns}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
               />
+              <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+            </>
             )}
       </div>
     </div>
