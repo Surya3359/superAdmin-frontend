@@ -40,7 +40,7 @@ const StylishTable = ({ data, columns, handleEdit, handleUnzip, handleDelete, ha
                         handleEdit(row); // Approve action
                         handleUnzip(row);
                       }}
-                      disabled={row.Approval_status === "Approved"}
+                      //disabled={row.Approval_status === "Approved"}
 
                     >
                      <Icon icon="simple-line-icons:check" style={{ fontSize: '14px',margin:0 }}/> Approve
@@ -216,7 +216,7 @@ const paginatedData = sortedData.slice(
       // Access `templateUrl` from `response.data`
       if (response.data && response.data.templateUrl) {
           // Construct the file URL, assuming filePath starts from "/Preview_Templates"
-          const fileUrl = `http://localhost:3000${response.data.templateUrl}`;
+          const fileUrl = `http://localhost:${response.data.usePort}${response.data.templateUrl}`;
           // Open the file URL in a new tab
           window.open(fileUrl, '_blank');
       } else {
@@ -227,6 +227,7 @@ const paginatedData = sortedData.slice(
       toast.error("An error occurred while trying to fetch the template URL.");
     }
   };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -269,7 +270,8 @@ const paginatedData = sortedData.slice(
     { header: "Completed Date", accessor: "CompletedDate" },
     { header: "Approved Date", accessor: "ApprovedDate" },
     { header: "Actions", accessor: "actions" },
-    { header: "Template Url", accessor: "templateUrl" }
+    { header: "Template Url", accessor: "templateUrl" },
+    { header: "Port No.", accessor: "usePort" },
   ];
 
   return (
